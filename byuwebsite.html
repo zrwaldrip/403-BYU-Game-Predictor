@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BYU Football 2025 Score Predictions</title>
+</head>
+<style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f8fafc;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background: #002E5D;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+      font-size: 1.8rem;
+    }
+    main {
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+    .game-card {
+      background: white;
+      border-radius: 12px;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    .game-card h3 {
+      margin: 0 0 0.5rem 0;
+    }
+    .inputs {
+      display: flex;
+      gap: 0.5rem;
+      margin: 0.5rem 0;
+    }
+    input {
+      width: 80px;
+      padding: 0.3rem;
+      font-size: 1rem;
+      text-align: center;
+    }
+    button {
+      background: #004A99;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #003570;
+    }
+    .saved {
+      font-size: 0.9rem;
+      color: green;
+      margin-top: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+  <header>BYU Football 2025 Score Predictions</header>
+  <main id="schedule"></main>
+
+  <script>
+    // Example future games
+    const games = [
+      { id: 1, date: "Sat, 9/27/2025", opponent: "Colorado" },
+      { id: 2, date: "Fri, 10/3/2025", opponent: "West Virginia" },
+      { id: 3, date: "Sat, 10/11/2025", opponent: "Arizona" },
+      { id: 4, date: "Sat, 10/18/2025", opponent: "Utah" },
+      { id: 5, date: "Sat, 10/25/2025", opponent: "TCU" },
+      { id: 6, date: "Sat, 11/1/2025", opponent: "Kansas State" },
+    ];
+
+    const container = document.getElementById("schedule");
+
+    function loadPredictions() {
+      return JSON.parse(localStorage.getItem("predictions")) || {};
+    }
+
+    function savePrediction(id, byuScore, oppScore) {
+      const preds = loadPredictions();
+      preds[id] = { byu: byuScore, opp: oppScore };
+      localStorage.setItem("predictions", JSON.stringify(preds));
+    }
+
+    function renderGames() {
+      const saved = loadPredictions();
+      container.innerHTML = "";
+      games.forEach(g => {
+        const card = document.createElement("div");
+        card.className = "game-card";
+        card.innerHTML = `
+          <h3>${g.date} vs ${g.opponent}</h3>
+          <div class="inputs">
+            <label>BYU: <input type="number" id="byu-${g.id}" value="${saved[g.id]?.byu || ""}"></label>
+            <label>${g.opponent}: <input type="number" id="opp-${g.id}" value="${saved[g.id]?.opp || ""}"></label>
+          </div>
+          <button onclick="save(${g.id})">Save Prediction</button>
+          <div id="saved-${g.id}" class="saved"></div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    window.save = function(id) {
+      const byuScore = document.getElementById(`byu-${id}`).value;
+      const oppScore = document.getElementById(`opp-${id}`).value;
+      savePrediction(id, byuScore, oppScore);
+      document.getElementById(`saved-${id}`).textContent = "Prediction saved!";
+    };
+
+    renderGames();
+  </script>
+</body>
+</html>
